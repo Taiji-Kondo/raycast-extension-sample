@@ -87,7 +87,7 @@ export default function Command() {
 const AddTodoAction = (props: { onCreate: (todo: Omit<ToDoType, 'id'>) => void }) => {
   return (
     <Action.Push
-      icon={Icon.Pencil}
+      icon={Icon.Plus}
       title="Add Todo"
       shortcut={{ modifiers: ["cmd"], key: "n" }}
       target={<AddTodoForm onCreate={props.onCreate} />}
