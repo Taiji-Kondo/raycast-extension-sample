@@ -37,6 +37,14 @@ export default function Command() {
     setTodos([...todos, {id: todos.length + 1, title: todo.title, isCompleted: false}]);
   }
 
+  const handleToggleIsCompleted = (id: number) => {
+    setTodos(todos.map((todo) => {
+      if (todo.id !== id) return todo
+
+      return {id, title: todo.title, isCompleted: !todo.isCompleted}
+    }))
+  }
+
   return (
     <List
       isLoading={isLoading}
@@ -47,15 +55,16 @@ export default function Command() {
         </ActionPanel>
       }
     >
-      {todos.map(({id, title, isCompleted}) => (
+      {todos.map((todo) => (
         <List.Item
-          key={id}
-          icon={'list-icon.png'}
-          title={title}
-          accessoryTitle={title}
-          accessoryIcon={{ source: Icon.Circle }}
+          key={todo.id}
+          title={todo.title}
+          accessoryIcon={{ source: todo.isCompleted ? Icon.Checkmark : Icon.Circle }}
           actions={
             <ActionPanel>
+              <ActionPanel.Section>
+                <ToggleTodoAction todo={todo} onToggle={() => handleToggleIsCompleted(todo.id)} />
+              </ActionPanel.Section>
               <ActionPanel.Section>
                 <AddTodoAction onCreate={handleAddToDo} />
               </ActionPanel.Section>
@@ -77,6 +86,17 @@ const AddTodoAction = (props: { onCreate: (todo: Omit<ToDoType, 'id'>) => void }
     />
   );
 }
+
+const ToggleTodoAction = (props: { todo: ToDoType, onToggle: () => void }) => {
+  return (
+    <Action
+      icon={props.todo.isCompleted ? Icon.Circle : Icon.Checkmark}
+      title={props.todo.isCompleted ? "Uncomplete Todo" : "Complete Todo"}
+      onAction={props.onToggle}
+    />
+  );
+}
+
 
 const AddTodoForm = (props: { onCreate: (todo: Omit<ToDoType, 'id'>) => void }) => {
   const { pop } = useNavigation();
