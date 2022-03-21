@@ -72,7 +72,10 @@ export default function Command() {
           key={todo.id}
           title={todo.title}
           icon={'list-icon.png'}
-          accessoryIcon={{ source: todo.isCompleted ? Icon.Checkmark : Icon.Circle }}
+          accessoryIcon={{
+            source: todo.isCompleted ? Icon.Checkmark : Icon.Circle,
+            tintColor: todo.isCompleted ? Color.Green : undefined
+          }}
           actions={
             <ActionPanel>
               <ActionPanel.Section>
