@@ -1,4 +1,4 @@
-import {Action, ActionPanel, Form, Icon, List, LocalStorage, useNavigation} from "@raycast/api";
+import {Action, ActionPanel, Color, Form, Icon, List, LocalStorage, useNavigation} from "@raycast/api";
 import {useEffect, useState} from "react";
 
 type ToDoType = {
@@ -43,6 +43,11 @@ export default function Command() {
     setTodos(todos.filter((todo) => todo.id !== id));
   }
 
+  // 全てのTODO削除
+  const handleDeleteAllToDo = () => {
+    setTodos([]);
+  }
+
   // TODOのステータス変更
   const handleToggleIsCompleted = (id: number) => {
     setTodos(todos.map((todo) => {
@@ -76,6 +81,7 @@ export default function Command() {
               <ActionPanel.Section>
                 <AddTodoAction onCreate={handleAddToDo} />
                 <DeleteTodoAction onDelete={() => handleDeleteToDo(todo.id)} />
+                <DeleteAllTodoAction onDeleteAll={handleDeleteAllToDo} />
               </ActionPanel.Section>
             </ActionPanel>
           }
@@ -103,6 +109,17 @@ const DeleteTodoAction = (props: { onDelete: () => void }) => {
       title="Delete Todo"
       shortcut={{ modifiers: ["cmd"], key: "x" }}
       onAction={props.onDelete}
+    />
+  );
+}
+
+const DeleteAllTodoAction = (props: { onDeleteAll: () => void }) => {
+  return (
+    <Action
+      icon={{source: Icon.Trash, tintColor: Color.Red}}
+      title="Delete All Todo"
+      shortcut={{ modifiers: ["cmd"], key: "d" }}
+      onAction={props.onDeleteAll}
     />
   );
 }
