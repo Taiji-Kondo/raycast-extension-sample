@@ -33,10 +33,17 @@ export default function Command() {
     LocalStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
+  // TODO追加
   const handleAddToDo = (todo: Pick<ToDoType, 'title'>) => {
     setTodos([...todos, {id: todos.length + 1, title: todo.title, isCompleted: false}]);
   }
 
+  // TODO削除
+  const handleDeleteToDo = (id: number) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  }
+
+  // TODOのステータス変更
   const handleToggleIsCompleted = (id: number) => {
     setTodos(todos.map((todo) => {
       if (todo.id !== id) return todo
@@ -67,6 +74,7 @@ export default function Command() {
               </ActionPanel.Section>
               <ActionPanel.Section>
                 <AddTodoAction onCreate={handleAddToDo} />
+                <DeleteTodoAction onDelete={() => handleDeleteToDo(todo.id)} />
               </ActionPanel.Section>
             </ActionPanel>
           }
@@ -83,6 +91,17 @@ const AddTodoAction = (props: { onCreate: (todo: Omit<ToDoType, 'id'>) => void }
       title="Add Todo"
       shortcut={{ modifiers: ["cmd"], key: "n" }}
       target={<AddTodoForm onCreate={props.onCreate} />}
+    />
+  );
+}
+
+const DeleteTodoAction = (props: { onDelete: () => void }) => {
+  return (
+    <Action
+      icon={Icon.Trash}
+      title="Delete Todo"
+      shortcut={{ modifiers: ["cmd"], key: "x" }}
+      onAction={props.onDelete}
     />
   );
 }
